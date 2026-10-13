@@ -103,6 +103,7 @@ documente o que ele protege.
 | `test_browser_account_lifecycle.py` | registro estável, criação lazy de contas desativadas, isolamento/retentativa de perfil com erro, reativação, remoção, notificações e encerramento idempotente |
 | `test_browser_page_button_ui.py` | avatar sem número, grayscale de conta desativada, ponto de estado, card, temas, escala e clique |
 | `test_check_box.py` | API, variantes, tamanhos, pintura, temas, tri-state, mouse, teclado e acessibilidade do CheckBox |
+| `test_clipboard_image_normalization.py` | normalização da imagem do clipboard ao ativar a janela, sem regravar seleção própria do ZapZap, sem substituir uma seleção mais nova recebida durante a recodificação e sem descartar formatos de texto |
 | `test_component_typography.py` | pesos de fonte de primitives, menus, combos, atalhos e tabs |
 | `test_custom_js_injection.py` | JavaScript customizado executado sob CSP com nonce, um arquivo por chamada, escopo global compartilhado e arquivo quebrado sem afetar os demais |
 | `test_debugging_settings_ui.py` | manutenção, relatórios, informações de runtime, cópia e feedback |
@@ -138,7 +139,7 @@ documente o que ele protege.
 | `test_qt_parameter_fallbacks.py` | escala, tema da bandeja, geometria, tipos e fail-closed do proxy global, zoom e download inválidos com autocura ou fallback restrito |
 | `test_reporting.py` | sanitização, minimização, Markdown, fila/TTL e captura local de encerramentos inesperados |
 | `test_reporting_ui.py` | formulário em duas etapas, prévia canônica, edição, cancelamento, clipboard e abertura segura do GitHub |
-| `test_resizable_chat_list.py` | ação compacta aplicando/salvando o mínimo, recarga, montagem tardia e redimensionamento posterior; limite de 85 px preservando alturas, avatares, cabeçalho, busca, texto e clique nativos; largura salva aplicada à coluna e à camada sobreposta, limites mínimos da lista e da conversa, alça na borda como separador focável com faixa de largura, setas, Home, End e Enter, duplo clique restaurando o padrão, alça cedendo o ponteiro a painéis sobre a borda, desativação ao vivo sem script de recarga, reinstalação sem duplicar após recarga e encaminhamento às contas ativas |
+| `test_resizable_chat_list.py` | geometria do frame envolvendo o avatar, margens compactas abaixo de 200 px, restauração e escopo restrito à lista; ação compacta aplicando/salvando o mínimo, recarga, montagem tardia e redimensionamento posterior; limite de 85 px preservando alturas, avatares, cabeçalho, busca, texto e clique nativos; largura salva aplicada à coluna e à camada sobreposta, limites mínimos da lista e da conversa, alça na borda como separador focável com faixa de largura, setas, Home, End e Enter, duplo clique restaurando o padrão, alça cedendo o ponteiro a painéis sobre a borda, desativação ao vivo sem script de recarga, reinstalação sem duplicar após recarga e encaminhamento às contas ativas |
 | `test_segmented_control.py` | seleção exclusiva, sinais, mouse, teclado, acessibilidade, tamanhos, raios e temas |
 | `test_send_message_to_number.py` | normalização/URL, lista de países, validação, acessibilidade e teclado do diálogo de conversa por número |
 | `test_settings_card.py` | divisores e grupos do card compartilhado em `ui.components` |
@@ -167,6 +168,7 @@ documente o que ele protege.
 - `test_browser_grid_view_ui.py`
 - `test_browser_page_button_ui.py`
 - `test_check_box.py`
+- `test_clipboard_image_normalization.py`
 - `test_component_typography.py`
 - `test_custom_js_injection.py`
 - `test_debugging_settings_ui.py`
@@ -372,6 +374,23 @@ Use uma conversa de teste e uma sessão gráfica real.
 3. Repita com texto rico/HTML copiado de um navegador ou editor e confirme que o
    atalho sem formatação usa apenas a apresentação textual compatível com o
    campo de mensagem.
+
+## Validação manual da normalização de imagens do clipboard
+
+Use uma sessão gráfica real, de preferência Wayland, e imagens sem dados
+sensíveis.
+
+1. Copie uma imagem em um navegador, ative o ZapZap e cole-a com **Ctrl+V** em
+   uma conversa de teste; a imagem deve ser anexada normalmente.
+2. Com o ZapZap focado e dono dessa imagem, capture uma área da tela com a
+   ferramenta do compositor que copia para o clipboard. Depois que o foco
+   voltar ao ZapZap, cole em outro aplicativo e confirme que a nova captura
+   permanece no clipboard, não a imagem anterior.
+3. Alterne o foco entre o ZapZap e outra janela várias vezes e confirme, por
+   exemplo com `wl-paste --watch` ou um gerenciador de clipboard, que o ZapZap
+   não regrava uma imagem que já é sua.
+4. Copie células do LibreOffice Calc, ative o ZapZap e confirme que outro
+   aplicativo ainda recebe o texto, não somente uma imagem.
 
 ## Validação manual do mute global
 
@@ -639,6 +658,10 @@ Habilite **Lista de conversas redimensionável** em Aparência, em sessão gráf
 real. Arraste a borda até o mínimo de 85 CSS px: confira a largura dos avatares,
 altura/posição das linhas e rolagem nativas, sem grandes espaços entre contatos.
 Abaixo de 200 px, cabeçalho, busca, filtros e menu ficam ocultos por CSS.
+Com CSS customizado desligado, confira hover e seleção em 85 px: o destaque
+deve envolver e centralizar o avatar. Repita pelo botão e pelo arraste,
+nos temas claro/escuro e após rolagem. Ao chegar a 200 px, restaurar a largura
+ou desativar o recurso, confirme o retorno das margens nativas do frame.
 Confirme contador sobre a foto e nome do contato no tooltip, incluindo novas
 mensagens e linhas reutilizadas após rolagem. Um segundo clique em Aplicar
 deve restaurar a largura anterior da página. Amplie a lista e confira que
