@@ -137,6 +137,7 @@ documente o que ele protege.
 | `test_quick_access_integration.py` | integração dos interruptores de Aparência, atualização de contas e não lidas, IDs numéricos, ações existentes, fechamento e independência da janela flutuante, modos automáticos/sob demanda, dispensa e reabertura, persistência/recuperação/bloqueio de posição, flags de manter acima e host CSR/shutdown; seletor de outras contas, sinal de atividade por página, IDs numéricos, pedidos tardios, DOM/reinserção/tema e geometria WebChannel com zoom |
 | `test_quick_access_panels_ui.py` | estrutura renderizada, decoração nativa solicitada, atualização de linhas sem recriar controles, métodos de visibilidade e coexistência do painel flutuante e do seletor integrado; popover compacto sem conta atual, ordenação por atividade e fechamento após seleção/Esc |
 | `test_qt_parameter_fallbacks.py` | escala, tema da bandeja, geometria, tipos e fail-closed do proxy global, zoom e download inválidos com autocura ou fallback restrito |
+| `test_renderer_crash_guard.py` | contagem de crashes do renderer em janela de 300s, escalada única no terceiro crash, reset por recovery e nova escalada após período quieto |
 | `test_reporting.py` | sanitização, minimização, Markdown, fila/TTL e captura local de encerramentos inesperados |
 | `test_reporting_ui.py` | formulário em duas etapas, prévia canônica, edição, cancelamento, clipboard e abertura segura do GitHub |
 | `test_resizable_chat_list.py` | geometria do frame envolvendo o avatar, margens compactas abaixo de 200 px, restauração e escopo restrito à lista; ação compacta aplicando/salvando o mínimo, recarga, montagem tardia e redimensionamento posterior; limite de 85 px preservando alturas, avatares, cabeçalho, busca, texto e clique nativos; largura salva aplicada à coluna e à camada sobreposta, limites mínimos da lista e da conversa, alça na borda como separador focável com faixa de largura, setas, Home, End e Enter, duplo clique restaurando o padrão, alça cedendo o ponteiro a painéis sobre a borda, desativação ao vivo sem script de recarga, reinstalação sem duplicar após recarga e encaminhamento às contas ativas |
@@ -201,6 +202,7 @@ documente o que ele protege.
 - `test_qt_parameter_fallbacks.py`
 - `test_quick_access_integration.py`
 - `test_quick_access_panels_ui.py`
+- `test_renderer_crash_guard.py`
 - `test_reporting.py`
 - `test_reporting_ui.py`
 - `test_resizable_chat_list.py`
